@@ -14,10 +14,10 @@ describe('visitar pagina movistar', () => {
 
         cy.url().should('include','a14')
 
-        cy.get('[data-special-price]').contains('cuotas sin interés') // falta validar que sean 3
+        cy.get('.price-content').contains('cuotas sin interés') // falta validar que sean 3
     })
 
-    /*it('Aplicar filtro de equipos  -Memoria Interna.128GB -Precio Entre 200Ky300K', () => {
+    it('Aplicar filtro de equipos  -Memoria Interna.128GB -Precio Entre 200Ky300K', () => {
         let minPrice = 0, maxPrice = 300000;
         let cantFiltros = 0;
 
@@ -63,17 +63,43 @@ describe('visitar pagina movistar', () => {
                 expect(price).to.be.greaterThan(minPrice);
                 expect(price).to.be.lessThan(maxPrice);
             })
-    })*/
+    })
 
-    /*it('Validar cuotas en compra de equipo -Cuotas.60 -Equipo.Tercero de la lista' +
+    it('Validar cuotas en compra de equipo -Cuotas.60 -Equipo.Tercero de la lista' +
         '-Banco.Credicoop -Tarjeta.Visa', () => {
-            cy.get('.products > ol').children().eq(2).click()
+            let bank = 'Credicoop'
+            let card = 'Visa'
+
+            cy.get('.products')
+                .find('.product-item')
+                .filter(':visible')
+                .eq(2)
+                .click()
+                
+            // Seleccionar banco
             cy.get('#open-installments-modal').click()
-            cy.get('#inputbank').type('Credicoop')
-            cy.get('#calculate_btn > .btn-primary').click()
+
+            cy.get('#inputbank')
+                .click();
 
             cy.get('#ui-id-2')
-            .children()
-            .contains('Credicoop');
-        })*/
+                .should('be.visible')
+                .contains(bank)
+                .click();
+
+            // Seleccionar tarjeta
+            cy.get('#inputCard').click()
+
+            cy.get('#selectCardByBank')
+                .should('be.visible')
+                .contains(card)
+                .click()
+
+            cy.get('#calculate_btn > .btn-primary').click()
+
+            // Comprobar que NO haya +60 cuotas sin interes
+            cy.get('#bodyTable')
+                .children()
+                .should('not.contain','60 cuotas sin interés')
+        })
 })
