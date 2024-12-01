@@ -1,0 +1,23 @@
+{
+  "name": "pt-cypress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx cypress run"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NicoQuino/PT-Cypress.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/NicoQuino/PT-Cypress/issues"
+  },
+  "homepage": "https://github.com/NicoQuino/PT-Cypress#readme",
+  "devDependencies": {
+    "char": "^1.0.2",
+    "cypress": "^13.16.0"
+  }
+}
