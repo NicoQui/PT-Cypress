@@ -13,6 +13,7 @@ describe('visitar pagina movistar', () => {
     // CP 001
     it('Validar cuotas en compra de equipo -Cuotas.3 -Equipo.A14 ', () => {
         let indexItem = 0;
+<<<<<<< HEAD
         let searchText = 'A14';
         searchText.toLowerCase();
 
@@ -30,6 +31,21 @@ describe('visitar pagina movistar', () => {
     })
 
     // CP 002
+=======
+        let searchText = 'A14{enter}';
+        // Búsqueda de equipo
+        cy.searchProduct(searchText);
+        // Selección
+        cy.selectProduct(indexItem,'A14');
+        // Verificar via url que sea el mismo equipo
+        cy.url().should('include','a14');
+        // Validar cuotas
+        cy.get('.price-content').contains('hasta n cuotas sin interes') 
+        // falta validar que sean 3
+        // podria hacerse parseando el numero -> if(n >= 3) pasa el test
+    })
+
+>>>>>>> 3033deac2574087ef307e19ec008136153769ab3
     it('Aplicar filtro de equipos  -Memoria Interna.128GB -Precio Entre 0Ky300K', () => {
         let minPrice = 0, maxPrice = 300000, filterAmount = 0;
         const memory = "128";
@@ -70,7 +86,10 @@ describe('visitar pagina movistar', () => {
             // Comprobar que NO haya +60 cuotas sin interes
             cy.notExistInstallments(text);
     })
+<<<<<<< HEAD
 
     // CP 004
 
+=======
+>>>>>>> 3033deac2574087ef307e19ec008136153769ab3
 })
