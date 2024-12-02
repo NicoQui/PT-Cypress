@@ -1,105 +1,76 @@
+/// <reference types="cypress" />
+
 describe('visitar pagina movistar', () => {
     beforeEach(() => {
         cy.visit('/');
+        cy.viewport(1024,720);
+        cy.log(Cypress.config('viewportWidth'));
+        cy.window().then((win) => {
+            cy.log(win.innerWidth);  // Verificar el tamaño real de la ventana
+          });
     })
+
+    // CP 001
     it('Validar cuotas en compra de equipo -Cuotas.3 -Equipo.A14 ', () => {
-        // seleccion equipo
-        cy.get('#search_action')
-            .type('A14{enter}')
+        let indexItem = 0;
+        let searchText = 'A14';
+        searchText.toLowerCase();
 
-        cy.get('.products .product-item')
-            .should('contain','A14')
-            .first()
-            .click()
-
-        cy.url().should('include','a14')
-
-        cy.get('.price-content').contains('cuotas sin interés') // falta validar que sean 3
+        // Búsqueda de equipo
+        cy.searchProduct(searchText);
+        // Selección
+        cy.selectProduct(indexItem,searchText);
+        // Verificar via url que sea el mismo equipo
+        cy.url().should('include',searchText.toLowerCase());
+        // Validar cuotas
+        cy.get('.price-content').contains('Hasta 9 cuotas sin interés') 
+        // falta validar que sean 3
+        // podria hacerse parseando el numero -> if(n >= 3) pasa el test
+        // o calculando cuotas como en cp 003
     })
 
-    it('Aplicar filtro de equipos  -Memoria Interna.128GB -Precio Entre 200Ky300K', () => {
-        let minPrice = 0, maxPrice = 300000;
-        let cantFiltros = 0;
+    // CP 002
+    it('Aplicar filtro de equipos  -Memoria Interna.128GB -Precio Entre 0Ky300K', () => {
+        let minPrice = 0, maxPrice = 300000, filterAmount = 0;
+        const memory = "128";
+        const memoryFilter = '.memory', priceFilter = '.price';
+        const memoryValue = '[data-value="802"]', priceValue = `[data-value="${minPrice}_${maxPrice}"]`;
 
-        cy.get('.block-subtitle')
-            .click()
+        // Aplicar filtro de memoria y verificar cantidad de filtros
+        cy.filterProduct(memoryFilter,memoryValue);
+        filterAmount++;
+        cy.verifyFilter(filterAmount,memory);
 
-        cy.get('.memory')
-            .click()
-        cy.get('[data-value="802"]')
-            .should('be.visible')
-            .click()
-
-        cy.get('.block-subtitle')
-            .click()
-        cy.get('.selectedfilters')
-            .first()
-            .should('contain','128')
-        cantFiltros++;
-
-        cy.get('.price').click() 
-        cy.get(`[data-value="${minPrice}_${maxPrice}"]`) // Aplico el filtro de la pagina (consigna = 200000_300000)
-            .should('be.visible')
-            .click()
-        cantFiltros++;
-
-        //cy.wait(5000) // espero que se apliquen los filtros
-        cy.get('.block-subtitle > span').should('contain',`${cantFiltros}`) // otra alternativa
+        // Aplicar filtro de memoria y verificar
+        cy.filterProduct(priceFilter,priceValue);
+        filterAmount++;
+        // Los 2 funcionan como 1, se comprueba que ambos textos esten en el filtro (0 y 300.000)
+        cy.verifyFilter(filterAmount,`${minPrice.toLocaleString('es-AR')}`);
+        cy.verifyFilter(filterAmount,`${maxPrice.toLocaleString('es-AR')}`);
         
-        cy.get('.products > ol')
-            .find('.product-item')
-            .filter(':visible')
-            .should('contain','128')
-            .and('have.length.greaterThan',0)
-            .then(($li) => {
-                const cantProd = $li.length;
-                cy.get('.total-products').should('contain',`${cantProd}`);
-            })
-
-        cy.get('.special-price')
-            .invoke('text')
-            .then((priceText) => {
-                const price = parseFloat(priceText.replace('$', '').replace('.', '').replace(',', '.').trim());
-                expect(price).to.be.greaterThan(minPrice);
-                expect(price).to.be.lessThan(maxPrice);
-            })
+        // Comprueba que los productos de la lista tambien cumplan los requisitos
+        cy.verifyProductsPrice(minPrice,maxPrice);
+        cy.verifyProductsMemory(memory);
+        // Comprueba si la cant de productos es la que se indica y la imprime en consola
+        cy.verifyTotalProducts();
     })
 
+    // CP 003
     it('Validar cuotas en compra de equipo -Cuotas.60 -Equipo.Tercero de la lista' +
         '-Banco.Credicoop -Tarjeta.Visa', () => {
-            let bank = 'Credicoop'
-            let card = 'Visa'
+            let indexItem = 2;
+            let bank = 'Credicoop', card = 'Visa';
+            let text = '60 cuotas sin interés';
 
-            cy.get('.products')
-                .find('.product-item')
-                .filter(':visible')
-                .eq(2)
-                .click()
-                
-            // Seleccionar banco
-            cy.get('#open-installments-modal').click()
-
-            cy.get('#inputbank')
-                .click();
-
-            cy.get('#ui-id-2')
-                .should('be.visible')
-                .contains(bank)
-                .click();
-
-            // Seleccionar tarjeta
-            cy.get('#inputCard').click()
-
-            cy.get('#selectCardByBank')
-                .should('be.visible')
-                .contains(card)
-                .click()
-
-            cy.get('#calculate_btn > .btn-primary').click()
+            // Seleccionar 3er producto de la lista
+            cy.selectProduct(indexItem,'');
+            // Entrar en calcular cuotas y rellenar los campos
+            cy.calculateInstallments(bank,card);
 
             // Comprobar que NO haya +60 cuotas sin interes
-            cy.get('#bodyTable')
-                .children()
-                .should('not.contain','60 cuotas sin interés')
-        })
+            cy.notExistInstallments(text);
+    })
+
+    // CP 004
+
 })

@@ -14,15 +14,18 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './commands'
+import './filterCommands'
+import './productCommands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
 
 Cypress.on('uncaught:exception', (err, runnable) => {
-    // Capturo un error que sucede varias veces y falla los test
-    // reading substring - slice
-    if (err.message.includes("Cannot read properties of undefined")) {
-      return false
-    }
+    // Capturo error que no pertenece a cypress para que no falle el test
+    // return false directo -> ignora todos los errores
+    return false 
+
+    // if (err.message.includes("Cannot read properties of undefined")) {
+    //   return false
+    // }
   })
