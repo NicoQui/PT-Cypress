@@ -20,6 +20,8 @@ Consideraciones:
 -Una validación no se logró hacer en el CP 001
 -En la consigna, cuando se indica "de no estar disponible (...)" se interpretó como un reemplazo de un prerrequisito de la prueba.
 -Se intentó aplicar uso de viewports, pero solo es aplicado en las situaciones donde el test falla.
+-Entiendo que los assertions tambien son muy mejorables.
+-No implemente fixtures. Estaria bueno hacerlo.
 
 4to Caso:
 CP004 - Validar función añadir al carrito de compras -HayMensaje -Url./chart -Equipo.Último de la lista 
