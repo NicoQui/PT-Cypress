@@ -8,6 +8,8 @@ Para ejecutar (en carpeta deseada):
 -npm install
 -npx cypress open
 
+// Hay un error con el archivo filterCommands.js que indica un problema tipo case sensitive. No pude solucionarlo, únicamente sacandolo de la carpeta commands y que quede en /support
+
 Sobre el proyecto:
 Cypress v13.16.0
 Se implementó el patrón de diseño POM (Page Object Model) con uso de Commands en la ejecución de los casos de prueba.
