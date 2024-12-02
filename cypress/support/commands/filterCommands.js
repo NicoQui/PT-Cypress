@@ -1,4 +1,4 @@
-import {FilterSection,ProductList} from "./PageObjects/HomePage"
+import {FilterSection,ProductList} from "../PageObjects/HomePage"
 
 // Filtra productos segun el valor que se le pase
 Cypress.Commands.add('filterProduct',(filter,value) => {
@@ -8,6 +8,12 @@ Cypress.Commands.add('filterProduct',(filter,value) => {
     cy.window().then((win) => {
         if (win.innerWidth < 1024) {
             filterSection.getMenuFilter().click();  
+        }
+        else{ 
+            // Deshabilita los desplegables que estan activos default
+            // Podria hacerse en todos con un foreach
+            filterSection.getBrandFilter().click();
+            filterSection.getPriceFilter().click();
         }
     });
 

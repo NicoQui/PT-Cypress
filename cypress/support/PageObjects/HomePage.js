@@ -1,4 +1,12 @@
 class FilterSection{
+    getBrandFilter(){
+        return cy.get('.brand > .filter-title');
+    }
+
+    getPriceFilter(){
+        return cy.get('.brand > .filter-title');
+    }
+
     getMenuFilter(){
         return cy.get('.block-subtitle');
     }

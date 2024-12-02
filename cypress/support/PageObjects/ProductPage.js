@@ -1,12 +1,14 @@
 class ProductPage{
-    //get
-
     getInstallmentsLink(){
         return cy.get('#open-installments-modal');
     }
 
+    getAddToCartBtn(){
+        return cy.get('#swatch_attribute_card');
+    }
+
     // Los siguientes podrian estar en una clase separada
-    // 
+    // Que haga referencia al elemento 'modal'
     getInstallmentsTable(){
         return cy.get('#bodyTable');
     }

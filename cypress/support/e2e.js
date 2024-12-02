@@ -14,8 +14,9 @@
 // ***********************************************************
 
 // Import commands.js using ES2015 syntax:
-import './filterCommands'
-import './productCommands'
+import './commands/filterCommands'
+import './commands/productCommands'
+import './commands/cartCommands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
